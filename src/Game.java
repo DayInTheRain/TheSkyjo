@@ -146,7 +146,9 @@ public class Game {
 	
 	public void endRound(int pNum) {
 		int[] scores;
-		
+		for(int p = 0; p < players.length; p++){
+			
+		}
 		
 		for(int i = 0; i < players.length; i++) {
 			int temp = players[i].getCardSum();
