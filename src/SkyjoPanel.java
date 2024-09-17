@@ -189,7 +189,6 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 	        	System.out.println(playState);
 	        	System.out.println("sup ");
 	        	int pNumber = skyjo.getPlayerName();
-
 	        	if(skyjo.getCurrentPlayer().allCardsUp() && !(playState.equals("lastTurn"))) {
 	        		playState = "lastTurn";
 	        		playersLeft--;
@@ -214,6 +213,8 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 	             	return;
 
 	        	} 
+				skyjo.endingTurn();
+				return;
 	        }
 	        
 	        else if(skyjo.gameState().equals("lastTurn")) {

@@ -145,16 +145,25 @@ public class Game {
 	}
 	
 	public void endRound(int pNum) {
-		int[] scores;
+		int[] scores = new int[players.length];
+
 		for(int p = 0; p < players.length; p++){
-			
+			scores[p] = players[p].getCardSum();
 		}
 		
 		for(int i = 0; i < players.length; i++) {
-			int temp = players[i].getCardSum();
-			players[i].setScorePlus(temp);
+			if(i == pNum){
+				break;
+			} else{
+				if(scores[pNum] >= scores[i]){
+					scores[pNum] *= 2;
+					break;
+				}
+			}
 		}
-	}
+
+
+	}//endRound
 	
 	
 	//getters and setters-------------------------------------------
