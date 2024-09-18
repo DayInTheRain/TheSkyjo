@@ -8,12 +8,13 @@ public class Player {
 	
 	public Player() {
 		matrix = new Card[3][4];
+		score = 0;
 	}//end of no parameter constructor
 	
 	public void fillMatrix(int[] values) {
 		int i = 0;
-		int i1 = (int) (Math.random()* 12);
-		int i2 = (int) (Math.random()* 12);
+		int i1 = (int) (Math.random()* 12); //sets one of the random cards as face up
+		int i2 = (int) (Math.random()* 12); //sets another of the random cards as face up
 		for(int r  = 0; r < matrix.length; r++ ) {
 			for (int c = 0; c < matrix[r].length; c++) {
 				if(i == i1 || i == i2) {
@@ -61,6 +62,15 @@ public class Player {
 		return true;
 	}
 	
+	public void flipAllCards(){
+		for(Card[] r : matrix) {
+			for(Card c: r) {
+				if(!c.getFace())
+					c.setFaceUp(true);
+			}
+		}
+	}
+
 	public int getCardSum() {
 		int sum = 0;
 		for(Card[] r : matrix) {
@@ -75,6 +85,19 @@ public class Player {
 	public int getScore() {return score;}
 	public void setScorePlus(int s) {this.score = this.score + s;}
 	
+	public ArrayList<Card> resetMatrix(){
+		ArrayList<Card> cards = new ArrayList<Card>();
+
+		for(int r = 0; r < matrix.length; r++){
+			for(int c = 0; c < matrix[c].length; c++){
+				if(matrix[r][c].getValue() != -3){
+					cards.add(matrix[r][c]);
+					matrix[r][c] = new Card();
+				}
+			}
+		}
+		return cards;
+	}
 	public Card[][] getMatrix(){return matrix;}
 	public void setMatrix(int x, int y, Card c) {
 		matrix[x][y] = c;

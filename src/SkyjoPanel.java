@@ -15,6 +15,7 @@ public class SkyjoPanel extends JPanel implements MouseListener{
     private Image table;
     private String playState;
     private int playersLeft;
+	private int pNumber = -1;
 
     public SkyjoPanel() {
     	skyjo = new Game(2);
@@ -46,13 +47,12 @@ public class SkyjoPanel extends JPanel implements MouseListener{
         heldCard = new Card();
         playState = "playing";
         playersLeft = skyjo.getPlayerNum();
-        
     }
 
     public void paint(Graphics g) {
-    	System.out.println(heldCard.getValue());
     	g.drawImage(table, 55, 55, 55, 55, null);
     	Card[][] matrix = skyjo.getCurrentPlayer().getMatrix();
+		Card[][] nextMatrix = skyjo.getNextPlayer().getMatrix();
     	//ArrayList
         //make the three by three array
         int x1;
@@ -71,6 +71,18 @@ public class SkyjoPanel extends JPanel implements MouseListener{
             }
             y1 += 160;
         }
+
+		//draws the next player's matrix
+		int y2 = 500;
+		for (Card[] cards : nextMatrix) {
+            int x2 = (int) (getWidth() / 2 + 300);
+            for (int j = 0; j < cards.length; j++) {
+                Card c = cards[j];
+                g.drawImage(getImage(c), x2, y2, 60, 75, null);
+                x2 += 70;
+            }
+            y2 += 80;
+        }
         
         g.drawImage(getImage(skyjo.getTopDeck()), (getWidth()/2) + 20, getHeight()/6 - 50, WDCard, HGCard, null);
         
@@ -79,7 +91,6 @@ public class SkyjoPanel extends JPanel implements MouseListener{
         } else if (skyjo.getDiscardPile().size() == 0){
             g.drawImage(getImage(new Card()), getWidth() - 150, 100, WDCard, HGCard, null);
         }
-        	System.out.println("drew heldcard succesfully");
             g.drawImage(getImage(heldCard), getWidth() - 150, 100, WDCard, HGCard, null);
         
         //next turn button && player text
@@ -90,6 +101,14 @@ public class SkyjoPanel extends JPanel implements MouseListener{
         g.setFont(f);
         g.drawString("Next Player", getWidth()-110, getHeight()-40);
         g.drawString("Player " + skyjo.getPlayerName(), getWidth()/2 - 270, getHeight()/4 + 110);
+
+		int scoreHeight = getHeight()/4 + 150;
+		for(int i = 0; i < skyjo.getPlayerNum(); i++){
+			g.drawString("Player " + i + " -> " + skyjo.getPlayer(i).getScore(), 100, scoreHeight );
+			scoreHeight += 20;
+		}//draws the scores
+
+
 
     }//end of paint
 
@@ -124,7 +143,6 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 	        	 if (x >= getWidth()/2 - 140 && x <= getWidth()/2 - 20 && y >= getHeight()/6 - 50 && y <= getHeight()/6 + 100) {
 	        		heldCard = skyjo.removeDiscard();
 	            	heldCard.setFaceUp(true);
-	            	System.out.println("HeldCard ran in mouse clicked draw is " + heldCard.getValue());
 	            	skyjo.draw();
 	              	repaint();
 	              	return;
@@ -132,7 +150,6 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 	             } else if (x >= getWidth()/2 + 20 && x <= getWidth()/2 + 140 && y >= getHeight()/6 -50 && y <= getHeight()/6 +100){
 	            	 heldCard = skyjo.removeFromDeck();
 	            	 heldCard.setFaceUp(true);
-	              	 System.out.println("HeldCard is " + heldCard.getValue());
 	             	skyjo.draw();
 	             	repaint();
 	             	return;
@@ -187,17 +204,23 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 	        
 	        else if(skyjo.gameState().equals("endingTurn")) {
 	        	System.out.println(playState);
-	        	System.out.println("sup ");
-	        	int pNumber = skyjo.getPlayerName();
+	        	
+				System.out.println("entered endingTurn");
 	        	if(skyjo.getCurrentPlayer().allCardsUp() && !(playState.equals("lastTurn"))) {
+					System.out.println("entered lastTurn");
 	        		playState = "lastTurn";
 	        		playersLeft--;
+					pNumber = skyjo.getPlayerName();
 	        	}else if(playState.equals("lastTurn")) {
+					System.out.println("entered lastTurn round");
 	        		playersLeft--;
+					skyjo.getCurrentPlayer().allCardsUp();
+					repaint();
 	        	}
 	        	
 	        	if(playersLeft == 0) {
 	        		playState = "endRound";
+					System.out.println("enters the endRound");
 	        		skyjo.endRound(pNumber);
 	        	}
 	        	
