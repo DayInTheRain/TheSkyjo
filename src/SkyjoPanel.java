@@ -111,7 +111,7 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 
 		if(playState.equals("stop")){
 			g.setFont(new Font("dialog", 1, 25));
-			g.drawString("Winner is " + skyjo.playerLowScore(), getWidth()-100, 50);
+			g.drawString("Winner is Player " + skyjo.playerLowScore(), getWidth()/2-100, 50);
 		}
 
     }//end of paint
