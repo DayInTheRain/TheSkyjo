@@ -235,6 +235,7 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 						return;
 					}else{
 						playState = "playing";
+						playersLeft = skyjo.getPlayerNum();
 						repaint();
 						return;
 					}
