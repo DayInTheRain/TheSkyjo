@@ -199,7 +199,7 @@ public class Game {
 			if(i == playerEnding){
 				break;
 			} else{
-				if(scores[playerEnding] >= scores[i]){
+				if(scores[playerEnding] >= scores[i] && scores[playerEnding] > 0){
 					scores[playerEnding] *= 2;
 					break;
 				}//if any score is less than or equal to another player, the player ending the round

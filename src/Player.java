@@ -77,7 +77,9 @@ public class Player {
 		int sum = 0;
 		for(Card[] r : matrix) {
 			for(Card c :r) {
-				sum += c.getValue();
+				if( c.getValue() != 3){
+					sum += c.getValue();
+				}
 			}
 		}
 		return sum;
