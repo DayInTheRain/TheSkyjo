@@ -13,8 +13,10 @@ public class Player {
 	
 	public void fillMatrix(int[] values) {
 		int i = 0;
+		int i2;
 		int i1 = (int) (Math.random()* 12); //sets one of the random cards as face up
-		int i2 = (int) (Math.random()* 12); //sets another of the random cards as face up
+		do{ i2 = (int) (Math.random()* 12); //sets another of the random cards as face up
+		}while(i1 == i2);
 		for(int r  = 0; r < matrix.length; r++ ) {
 			for (int c = 0; c < matrix[r].length; c++) {
 				if(i == i1 || i == i2) {

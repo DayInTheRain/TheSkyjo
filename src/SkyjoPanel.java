@@ -104,11 +104,15 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 
 		int scoreHeight = getHeight()/4 + 150;
 		for(int i = 0; i < skyjo.getPlayerNum(); i++){
-			g.drawString("Player " + i + " -> " + skyjo.getPlayer(i).getScore(), 100, scoreHeight );
+			g.drawString("Player " + i + " -> " + skyjo.getPlayer(i).getScore(), 100, scoreHeight);
 			scoreHeight += 20;
+			System.out.println("drawing the scores");
 		}//draws the scores
 
-
+		if(playState.equals("stop")){
+			g.setFont(new Font("dialog", 1, 25));
+			g.drawString("Winner is " + skyjo.playerLowScore(), getWidth()-100, 50);
+		}
 
     }//end of paint
 
@@ -204,8 +208,8 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 	        
 	        else if(skyjo.gameState().equals("endingTurn")) {
 	        	System.out.println(playState);
-	        	
 				System.out.println("entered endingTurn");
+
 	        	if(skyjo.getCurrentPlayer().allCardsUp() && !(playState.equals("lastTurn"))) {
 					System.out.println("entered lastTurn");
 	        		playState = "lastTurn";
@@ -221,12 +225,20 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 	        	if(playersLeft == 0) {
 	        		playState = "endRound";
 					System.out.println("enters the endRound");
-	        		skyjo.endRound(pNumber);
+					skyjo.endRound(pNumber);
 	        	}
-	        	
-	        	if(playState.equals("endRound")) {
-	        		
-	        	}
+
+				if(playState.equals("endRound")){
+					if(skyjo.gameEnds()){
+						playState = "stop";
+						repaint();
+						return;
+					}else{
+						playState = "playing";
+						repaint();
+						return;
+					}
+				}
 	        	
 	        	if (x >= getWidth()-120 && x <= getWidth()-20 && y >= getHeight()-70 && y <= getHeight()-20) {
 	            	skyjo.switchCurrentPlayer();
@@ -236,14 +248,15 @@ public class SkyjoPanel extends JPanel implements MouseListener{
 	             	return;
 
 	        	} 
+
 				skyjo.endingTurn();
 				return;
 	        }
 	        
-	        else if(skyjo.gameState().equals("lastTurn")) {
-	        	
-	        }
     	}
+
+		//insert final scoring
+
     }//end of mouseClicked
 
 }//end of class

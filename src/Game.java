@@ -13,13 +13,17 @@ public class Game {
 	 
 	public Game(int numPlayers) {
 		players = new Player[numPlayers];
+		for(int i = 0; i < players.length; i++){
+			players[i] = new Player();
+		}
 		
-		dealCardsToPlayers();
-		shuffleDeck();
-		addToDiscard(new Card());
-		addToDiscard(getTopDeck());
-		removeFromDeck();
-		gameState = "beginningRound";
+		beginningRound();
+		// dealCardsToPlayers();
+		// shuffleDeck();
+		// addToDiscard(new Card());
+		// addToDiscard(getTopDeck());
+		// removeFromDeck();
+		// gameState = "beginningRound";
 	}//one parameter constructor
 	
 	
@@ -71,7 +75,7 @@ public class Game {
 				numCards[i + 2] -= 1;
 			}
 			
-			players[p] = new Player();
+			//players[p] = new Player();
 			players[p].fillMatrix(temp);
 			gameState = "dealingCards";
 			//System.out.println(gameState);
@@ -88,7 +92,7 @@ public class Game {
 		try {
 			return discardPile.removeLast();
 		}catch (Exception E) {
-			System.out.println("something went wrong");
+			System.out.println("something went wrong - discard");
 			return new Card();
 		}
 	}
@@ -97,12 +101,21 @@ public class Game {
 		try {
 			return deck.removeLast();
 		}catch (Exception E) {
-			System.out.println("something went wrong");
+			System.out.println("something went wrong - deck");
 			return new Card();
 		}
 	}
 
-	
+	public int playerLowScore(){
+		int min = players[0].getScore();
+		int playNum = 0;
+		for(int i = 1; i < players.length; i++ ){
+			if(min > players[i].getScore()){
+				playNum = i;
+			}
+		}
+		return playNum;
+	}
 	//--------------------------------------------------------------
 	
 	public void beginningRound() {
@@ -114,18 +127,19 @@ public class Game {
 				}
 			}
 		}//adds the cards from the matrix to the deck
-		for(int i = discardPile.size() - 1; i >= 0; i++){
-			Card temp = removeDiscard();
+		for(int i = 0; i > discardPile.size(); i++){
+			System.out.println("Went wrong here!");
+			Card temp = discardPile.get(0);
 			deck.add(temp);
 		}//adds the cards from the discard pile to the deck
 
 		dealCardsToPlayers();
 		shuffleDeck();
-		addToDiscard(new Card());
 		addToDiscard(getTopDeck());
 		removeFromDeck();
 		gameState = "beginningRound";
 		startTurn();
+		return;
 	}
 	
 	public void startTurn() {
@@ -172,6 +186,9 @@ public class Game {
 	}
 	
 	public void endRound(int playerEnding) {
+		gameState = "endingRound";
+		System.out.println(gameState);
+
 		int[] scores = new int[players.length];
 
 		for(int p = 0; p < players.length; p++){
@@ -192,9 +209,27 @@ public class Game {
 
 		for(int p = 0; p < players.length; p++){
 			players[p].setScorePlus(scores[p]);
+			System.out.println("setting scores");
 		}
 
+		return;
 	}//endRound
+
+	public boolean gameEnds(){
+		for(int p = 0; p < players.length; p++){
+			if(players[p].getScore() >= 100){
+				gameState = "endGame";
+			}
+		}
+
+		if (gameState.equals("endGame")){
+			return true;
+		} else{
+			gameState = "beginningRound";
+			beginningRound();
+			return false;
+		}
+	}
 	
 	
 	//getters and setters-------------------------------------------
@@ -202,7 +237,7 @@ public class Game {
 	public int getPlayerName() {return currentPlayer;}
 	public Player getNextPlayer() {return  players[nextPlayer];}
 	public int getPlayerNum() {return players.length;}
-	public Player getPlayer(int i ) {return players[i];}
+	public Player getPlayer(int i) {return players[i];}
 	
 	public ArrayList<Card> getDeck() {return deck;}
 	public Card getTopDeck() { return deck.getLast();}
