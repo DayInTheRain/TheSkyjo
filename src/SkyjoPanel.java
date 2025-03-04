@@ -50,7 +50,7 @@ public class SkyjoPanel extends JPanel implements MouseListener{
     }
 
     public void paint(Graphics g) {
-    	g.drawImage(table, 55, 55, 55, 55, null);
+    	
     	Card[][] matrix = skyjo.getCurrentPlayer().getMatrix();
 		Card[][] nextMatrix = skyjo.getNextPlayer().getMatrix();
     	//ArrayList
@@ -61,6 +61,7 @@ public class SkyjoPanel extends JPanel implements MouseListener{
         super.paint(g);
         Font f = new Font("dialog", 1, 15);
 
+		g.drawImage(table, 0, 0, getWidth(), getHeight(), null);
         //fill the array with the different cards from matrix face down
         for (Card[] cards : matrix) {
             x1 = (int) (getWidth() / 2 - 280);
